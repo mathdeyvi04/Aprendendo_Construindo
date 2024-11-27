@@ -1,0 +1,16 @@
+PESSOAS,Quantidades
+Amanda,1,N
+Bernado,0,N
+Calebe,2,H
+Daniel,1,N
+Eduarda,0,N
+Farias,3,N
+Gabriela,1,N
+Heitor,1,N
+Isais,4,N
+Joao,1,N
+Kaique,0,N
+Matheus,3,N
+Naila,1,N
+Oliveira,2,N
+Paula,1,N

@@ -1,0 +1,130 @@
+Sobre o projeto;
+/*
+A partir de estruturas, vamos fazer um trabalho melhor! 
+OBJETIVO: Ser capaz de criar uma lista que seleciona os próximos de serviço e 
+consegue adicionar os baixados e os de descanso.
+Alem de uma melhor reestruturação, também queremos que seja possível fazermos
+escala futura, não so a atual.
+
+Caracteristicas do Banco de Dados:
+
+ALUNO, Q.SERVIÇOS NA ALA, Q.SERVIÇOS NO 3º, Q.SERVIÇOS SENTINELA, Está Baixado?, Está em condições?(48h)
+                                                                     0 p/ não.          1 p/ sim
+
+
+
+
+    alunos.txt: 
+Guarda a relação de militares, mesmo baixados e de descanso, mostrando sua situação atual e seus serviços.
+
+
+    pegar_alunos.py:
+Apesar de não integrarmos python ao programa, seria possivel a construção de um programa capaz de 
+abrir a planilha de excell e ler exatamente o nome de guerra de cada, usando a bibloteca pandas
+dai poderiamos formar o arquivo txt de alunos anterior.
+
+
+    baixados.txt:
+Serve para armazenarmos a informação dos baixados, mais especificamente até que data eles estarão baixados.
+Se fossemos apagar para reescrever precisariamos criar uma nova variavel para armazenar os dados, algo sem 
+utilidade, logo colocamos na função de append para que assim também possa ser uma espécie de historico de baixado.
+Em teoria, poderiamos até criar outro programa em python capaz de ler cada atualização desse arquivo txt e passa-lo
+para o excell
+
+    descanso.txt:
+Para sabermos quem está de descanso e quando sairá. E quando chegar o dia, eliminá-lo
+
+
+*/
+
+Sobre os sanhas;
+/*Padronizei agora sempre fazer pelas linhas usando while ou for e uma variavel
+que determinará a linha, sem aquela coisa do feof.
+
+
+Como automatizar os baixados e os descansados??
+Sempre fazer atualizações.
+
+
+Quando alguem baixar, devemos verificar se ela está presente nas escalas que existem.
+Sendo assim, devemos fazer buscas pelas escalas até achar se a pessoa esta presente.
+O ponto é que por exemplo, uma pessoa esta baixada ate 25/04, então nas escalas de 26 pra frente,
+não sera mais necessario vermos, por que ela ja desbaixou, compreende?
+
+
+
+Comparar strings sempre é um sanha, como nas verificações nas escalas. O programa estava
+vendo um vazio ainda, por algum motivo, mas eu tankei
+
+
+Podemos ter um bug sobre a data, tipo hoje é dia x e, a partir de algum horario,
+a função diz que hoje é dia x+1, deve ocorrer por causa do fuso horario, mas da pra cartear.
+
+
+Assim que uma escala entra em vigor, devemos adicionar o serviço nos dados de cada aluno,
+mas COMO
+
+
+Fazer a escoolha de cada militar para sua determinada area é mt dificil
+
+
+PQP, cruzamento de datas são muito dificieis, por exemplo, fazer escalas de 25 ate 03 do mes seguinte!!!
+
+
+Fiquei no sanha infinito ate descobrir que estava tendo problema com as formas que eu estava usando 
+para armazenar o index de cada militar no sistema de escala.
+
+
+
+
+
+
+*/
+
+Sobre a escala;
+/*Temos 3 tipos de serviço, vamo mudar a escala quando for o caso, por exemplo:
+
+Não levaremos em consideração o fato de que o segfem não tira serviço na ala, 
+isto é, vamos considerar uma mesma ala.
+
+Deveremos formar uma nova lista de pessoas em condições e não baixados. Nela, ana-
+lisaremos as pessoas priorizando a menor quantidade de serviço e a menor quantidade 
+do tipo de serviço. 
+
+Assim que houver troca de escala, a que entrar em vigor, devemos colocar os novos
+de serviço no dia e colocá-los em descanso.
+
+Dias menos quinta e domingo e sabado.
+4 plantoes (segfem e segmas)
+3 plantoes 3*
+
+Quinta e domingo
+6 plantoes
+3 plantoes 3*
+
+sabado
+4 plantoes
+3 plantoes 3*
+6 sentinelas
+
+
+
+
+
+
+Independente das diferenças, sempre teremos grupos de nomes afastados, significando 
+os tipos de serviços existentes
+
+Quando alguem baixar, devemos mostrar que para o usuario se esta esta nas escalas
+Caso esteja, devemos indicar a proxima pessoa da escala para substituir!
+
+
+Quem entrar em descanso, por exemplo:
+Domingo, 01 (esta de serviço)
+Segunda, 02 (Descanso)
+Terça, 03 (Descanso)
+Quarta, 04 (Em condições)
+
+
+*/
+
