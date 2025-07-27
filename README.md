@@ -21,4 +21,7 @@ Pude estudar mais assiduamente algoritmos e estruturas de dados.
 >Durante o curso básico e o início de meu aprendizado em C, pude criar diversas
 aplicações interessantes, como um Software Bancário ou Gerenciador de Faltas.
 
+### Lista de Cálculo
+
+>Pude obter uma lista matemática de alto nível, interessante para estudar cálculo numérico.
 
