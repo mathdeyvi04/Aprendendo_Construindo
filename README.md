@@ -25,3 +25,13 @@ aplicações interessantes, como um Software Bancário ou Gerenciador de Faltas.
 
 >Pude obter uma lista matemática de alto nível, interessante para estudar cálculo numérico.
 
+### Disciplina de Programação Aplicada
+
+>Códigos relativos às listas dadas pelo professor.
+
+
+
+
+
+
+
