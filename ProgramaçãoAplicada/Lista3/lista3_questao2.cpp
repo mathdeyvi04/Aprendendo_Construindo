@@ -182,8 +182,11 @@ public:
  * Limitações:
  * 
  * - Não há um conjunto de verificações eficiente para as entradas do usuário, apenas verificamos 
- * o clássico de 'se é inteiro', 'se é digito', etc. Apesar disso, acredito que verificações de dualidade
+ * o clássico de 'se é inteiro', 'se é digito', etc. Apesar disso, acredito que verificações de existência e de dualidade
  * são essenciais em um sistema como este.
+ * 
+ * - Estrutura de dados escolhida para este problema é horrível, seria extremamente mais eficiente escolhermos
+ * algo como o dicionário do python, um map ou unorderned_map.
  * 
  */
 class Sistema {
@@ -636,6 +639,29 @@ public:
 				std::cout << list_funcionalities[i] << std::endl;
 			}
 		}
+		else if(flag_container == 4){
+
+			printf("-----------------------------------------------\n");
+			printf("Menu de Disciplinas Registradas\n");
+			printf("-----------------------------------------------\n");
+
+			// Vamos apresentar as funcionalidades de forma escalável:
+			std::vector<std::string> list_funcionalities = {
+				"0 - Encerrar",
+				"1 - Inserir nova disciplina",
+				"2 - Remover Disciplina",
+				"3 - Consultar - Verifica alunos matriculados na disciplina."
+			};
+
+			for(
+				size_t i = 0;
+					   i < list_funcionalities.size();
+					   i++
+			){
+
+				std::cout << list_funcionalities[i] << std::endl;
+			}
+		}
 		else{
 
 			throw std::invalid_argument("Não há suporte para este índice.");
@@ -660,10 +686,14 @@ public:
 
 			try {
 
+				if(cpf.size() != 5){
+					throw std::invalid_argument("");
+				}
+
 				id = std::stoi(cpf);
 				break;
 			}
-			catch(std::invalid_argument&){
+			catch(const std::invalid_argument&){
 
 				std::cout << "Entrada inválida" << std::endl;
 			}
@@ -758,22 +788,54 @@ public:
 	remove_aluno(){
 
 		int id = 0;
-		std::string entrada;
 		while(true){
 
-			std::cout << "Informe o ID do aluno: ";
-			std::getline(std::cin, entrada);
+			std::string entrada;
+			while(true){
 
-			try {
+				std::cout << "Informe o ID do aluno: ";
+				std::getline(std::cin, entrada);
 
-				id = std::stoi(entrada);
+				try {
+					if(entrada.size() != 5){
+						throw std::invalid_argument("");
+					}
+
+					id = std::stoi(entrada);
+					break;
+				}
+				catch(const std::invalid_argument&){
+
+					std::cout << "Entrada inválida" << std::endl;
+				}
+			}
+
+			// Precisamos verificar se o aluno existe
+			bool aluno_existis = false;
+			for(
+				const auto& aluno : list_alunos
+			){
+
+				if(
+					std::stoi(aluno.get_info(0)) == id
+				){
+
+					aluno_existis = true;
+					break;
+				}
+			}
+			if(!aluno_existis){
+
+				std::cout << "Aluno não existe!" << std::endl;
+				aluno_existis = false;
+				continue;
+			}
+			else{
+
 				break;
 			}
-			catch(std::invalid_argument&){
-
-				std::cout << "Entrada inválida" << std::endl;
-			}
 		}
+
 
 		// Supondo que conseguimos, devemos removê-lo da lista de alunos.
 		list_alunos.erase(
@@ -805,6 +867,203 @@ public:
 	}
 
 	/**
+	 * @brief Forncerá a lista de disciplinas que o aluno está matriculado	
+	 */
+	void
+	consultar_aluno(){
+
+		while(true){
+
+			// Devemos obter o ID do aluno a ser consultado.
+			std::string entrada;
+			int id;
+			while(true){
+
+				std::cout << "Forneça o ID do aluno: ";
+				std::getline(std::cin, entrada);
+
+				try {
+
+					if(entrada.size() != 5){
+						throw std::invalid_argument("");
+					}
+
+					id = std::stoi(entrada);
+					break;
+				}
+				catch(const std::invalid_argument&){
+
+					std::cout << "Entrada inválida" << std::endl;
+				}
+			}
+
+			// O ideal é ver se esse aluno existe.
+			bool aluno_existis = false;
+			for(
+				const auto& aluno : list_alunos
+			){
+
+				if(
+					std::stoi(aluno.get_info(0)) == id
+				){
+
+					aluno_existis = true;
+					break;
+				}
+			}
+			if(!aluno_existis){
+
+				std::cout << "Aluno não existe!" << std::endl;
+				aluno_existis = false;
+				continue;
+			}
+
+			// De posse do id do aluno, podemos verificar em quais disciplinas ele está matriculado.
+			std::cout << "Aluno " 
+				      << entrada 
+				      << " matriculado em: "
+				      << std::endl;
+			for(
+				const auto& relations : list_relations
+			){
+
+				for(
+					int i = 1;  // Afinal, apenas a partir do segundo há os id's de alunos.
+						i < (int)relations.size();
+						i++
+				){
+
+					if(
+						// Assim que o encontrarmos
+						id == relations[i]
+					){
+
+						std::cout << "- " 
+								  << relations[0]
+								  << std::endl;
+
+						// Seria interessante informarmos mais dados sobre a disciplina, mas...
+
+						break;
+					}
+				}
+			}
+
+
+			std::cout << "Mais uma consulta?(0 - Não): ";
+			std::getline(std::cin, entrada);
+			try {
+
+				if(
+					std::stoi(entrada) == 0
+				){
+
+					break;
+				}
+			}
+			catch(const std::invalid_argument&){ /*Não faremos nada*/ }
+			printf("\n");
+		}
+
+		// Não há alteração do banco de dados, logo não precisamos salvar algo
+	}
+
+	/**
+	 * @brief Fornecerá as ferramentas necessárias para adição de uma nova disciplina.	
+	 */
+	void
+	insert_disciplina(){
+
+		// Primeiro, as informações da mesma.
+		int id, credito;
+		std::string nome, professor, entrada;
+		while(true){
+			std::cout << "Informe o ID da disciplina: ";
+			std::getline(std::cin, entrada);
+			
+			try {
+
+				if(entrada.size() != 4){
+					throw std::invalid_argument("");
+				}
+
+				id = std::stoi(entrada);
+				break;
+			}
+			catch(const std::invalid_argument&){
+
+				std::cout << "Entrada inválida" << std::endl;
+			}			
+		}
+
+		std::cout << "Informe o NOME da disciplina: ";
+		std::getline(std::cin, nome);
+
+		std::cout << "Informe o PROFESSOR da disciplina: ";
+		std::getline(std::cin, professor);
+
+		while(true){
+			std::cout << "Informe o CRÉDITO da disciplina: ";
+			std::getline(std::cin, entrada);
+			
+			try {
+
+				credito = std::stoi(entrada);
+				break;
+			}
+			catch(const std::invalid_argument&){
+
+				std::cout << "Entrada inválida" << std::endl;
+			}			
+		}
+		
+		// De posse de todas as informações
+		list_disciplinas.emplace_back(
+									 id,
+									 nome,
+									 professor,
+									 credito
+									 );
+
+		list_relations.emplace_back(); // Iniciamos um vetor default
+		list_relations.back().emplace_back(id); // Já colocamos o id da disciplina primeiro
+		while(true){
+
+			std::cout << "Apresente os alunos matriculados na disciplina separados por vírgula(* - todos):" << std::endl;
+			std::getline(std::cin, entrada);
+
+			if(entrada.size() && entrada[0] == '*'){
+
+				// Todos os alunos deverão ser adicionados.
+				for(
+					const auto& aluno : list_alunos
+				){
+
+					list_relations.back().emplace_back(aluno.get_info(0));
+				}
+
+				break;
+			}
+			else{
+
+				if(entrada.find(",")){ std::cout << "Entrada inválida, separe com ','" << std::endl; continue;}
+				// Apenas alguns serão matriculados
+
+				for(
+					const auto& string_id : split(entrada)
+				){
+
+					list_relations.back().emplace_back(std::stoi(string_id));
+				}
+
+				break;
+			}
+		}
+
+		houve_altera = true;
+	}
+
+	/**
 	 * @brief Menu de apresentação, inserção, remoção e de busca.
 	 * @details
 	 * 
@@ -814,9 +1073,9 @@ public:
 	mainloop(){
 
 		bool there_is_a_error = false;
-
+		int PULA_LINHAS = 40;
 		while(true){
-			for(int i = 0; i < 20; i++){ printf("\n"); }
+			for(int i = 0; i < PULA_LINHAS; i++){ printf("\n"); }
 
 			if(there_is_a_error){ std::cout << "--> Entrada inválida." << std::endl; there_is_a_error = false; }
 			print(2);
@@ -840,7 +1099,7 @@ public:
 					// Devemos apresentar outro menu.
 					there_is_a_error = false;
 					while(true){
-						for(int i = 0; i < 20; i++){ printf("\n"); }
+						for(int i = 0; i < PULA_LINHAS; i++){ printf("\n"); }
 
 						if(there_is_a_error){ std::cout << "--> Entrada inválida." << std::endl; there_is_a_error = false; }
 						print(3);
@@ -861,24 +1120,75 @@ public:
 
 								// Devemos adicionar um aluno ao banco de alunos.
 								// Basta que peçamos um conjunto de entradas e estaremos em condições de adicionar o novo aluno.
-
+								printf("\n");
 								insert_aluno();
 							}
 							else if(decisao == 2){
 
+								printf("\n");
 								remove_aluno();
+							}
+							else if(decisao == 3){	
+
+								printf("\n");
+								consultar_aluno();
+							}
+							else{
+
+								there_is_a_error = true;
+							}
+						}
+						catch(const std::invalid_argument&) {
+							there_is_a_error = true;
+						}
+					}
+				}
+				else if(decisao == 2){
+
+					there_is_a_error = false;
+					while(true){
+						for(int i = 0; i < PULA_LINHAS; i++){ printf("\n"); }
+
+						print(4);
+						print(1);
+
+						std::cout << "\nEscolha uma opção: ";
+						std::getline(std::cin, entrada);
+
+						try {
+
+							int decisao = std::stoi(entrada);
+
+							if(decisao == 0){
+
+								break;
+							} 
+							else if(decisao == 1){
+
+								// Desejamos adicionar uma nova disciplina.
+								insert_disciplina();
+							}
+							else if(decisao == 2){
+
+
 							}
 							else if(decisao == 3){
 
+
+							}
+							else{
+
+								there_is_a_error = true;
 							}
 						}
-						catch(std::invalid_argument&) {
+						catch(const std::invalid_argument&){
+
 							there_is_a_error = true;
 						}
 					}
 				}
 			}
-			catch(std::invalid_argument&){
+			catch(const std::invalid_argument&){
 
 				there_is_a_error = true;
 			}

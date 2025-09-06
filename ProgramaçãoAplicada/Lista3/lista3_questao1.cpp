@@ -36,7 +36,7 @@ public:
 	}
 
 	/**
-	 * @brief Sobrecarga do operator SOMA
+	 * @brief Sobrecarga do operator SOMA entre dois complexos
 	 */
 	Complex
 	operator+(
