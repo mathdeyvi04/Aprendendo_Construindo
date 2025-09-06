@@ -1,33 +1,10 @@
 #include <iostream>
-
-/*
-Questão 1
-
-Uma fila é um tipo de estrutura de dados utilizado em computação que funciona como
-uma fila de objetos do nosso dia a dia: o primeiro elemento a ser inserido é o primeiro a
-ser retirado. Por causa da forma como os dados são guardados e acessados, essa estrutura
-também é chamada de FIFO (first-in first-out, o último a entrar é o último a sair).
-
-A implementação de uma estrutura de dados do tipo fila pode ser feita através de uma
-classe. Esta classe deve permitir que sejam inseridos e retirados elementos da fila e manter
-o controle da quantidade de elementos disponíveis na fila. Assim bloqueando operações
-inválidas, como por exemplo, retirar elementos de uma fila vazia.
-
-a) Desenhar fluxograma explicando como seria uma possível estratégia de implementação da
-classe.
-
-b) Declarar a classe fila especificando quais métodos e atributos seriam necessários e
-suficientes para implementá-la.
-*/
-
-//--------------------------------------------------------------------------------------------
 	
 /**
  * @brief Responsável por representar a estrutura de dados FIFO.
  * @details 
  * 
- * Conforme explicitado no enunciado, apenas focaremos na implementação básica de inserção e 
- * remoção.
+ * Conforme explicitado no enunciado, apenas focaremos na implementação básica de inserção e remoção.
  */
 template <typename T_class>
 class Fila {
@@ -41,24 +18,23 @@ private:
 
 public:
 
-		/**
-		 * @brief Construtor da Classe Fila
-		 * @details
-		 * 
-		 * Observe que alocamos um array que representará nossa estrutura 
-		 * na memória.	
-		 */
-		explicit Fila(
-			size_t full_len
-		) : 
-			_full_length(full_len),
-			_front(0),	
-			_back(full_len - 1),
-			_length(0)
-		{
+	/**
+	 * @brief Construtor da Classe Fila
+	 * @details
+	 * 
+	 * Observe que alocamos um array que representará nossa estrutura na memória.	
+	 */
+	explicit Fila(
+		size_t full_len
+	) : 
+		_full_length(full_len),
+		_front(0),	
+		_back(full_len - 1),
+		_length(0)
+	{
 
-			_fifo = new T_class[_full_length];
-		}
+		_fifo = new T_class[_full_length];
+	}
 
 	/**
 	 * @brief Destrutor da Classe Fila
@@ -178,63 +154,11 @@ public:
 		os << "]";
 		return os;
 	}
-
-	/**
-	 * @brief Apresentará o fluxo de funcionamento básico da classe. Solução item A.
-	 * @details 
-	 * 
-	 * Como esta função não acessa elementos ou chama outras funções de classe, 
-	 * caracterizasse como uma função estática.	
-	 */ 
-	static void
-	print_flux(){
-		std::cout <<
-R"(               
-                                                    +----------+                                         
-                                                    |Criar Fila|                                         
-                                                    +-----+----+                                         
-                                                          |                                              
-         +----------------------------+-------------------+---------+----------------------------+       
-         |                            |                             |                            |       
-         v                            v                             v                            v       
-       +---+                      +------+                        +---+                       +----+     
-       |get|                      |insert|                        |pop|                       |size|     
-       +-+-+                      +---+--+                        +-+-+                       +--+-+     
-         |                            |                             |                            |       
-         v                            v                             v                            v       
-   +-----------+                +-----------+                 +-----------+                +------------+
-   |Está Vazia?|                |Está Cheia?|                 |Está Vazia?|                |Retorna     |
-   +-----+-----+                +-----+-----+                 +-----+-----+                |quantidade  |
-         |                            |                             |                      |de elementos|
-   +-----+-----+                +-----+-----+                 +-----+-----+                +------------+
-   |           |                |           |                 |           |                              
-   v           v                v           v                 v           v                              
- +---+       +---+            +---+       +---+             +---+       +---+                            
- |sim|       |não|            |sim|       |não|             |sim|       |não|                            
- +-+-+       +-+-+            +-+-+       +-+-+             +-+-+       +-+-+                            
-   |           |                |           |                 |           |                              
-   v           v                v           v                 v           v                              
-+-----+   +---------+        +-------+  +--------+         +-----+   +---------+                         
-|Error|   |Retorna  |        |Retorna|  |Aloca   |         |Error|   |Retira   |                         
-+-----+   |primeiro |        |False  |  |elemento|         +-----+   |elemento |                         
-          |elemento |        +-------+  |no final|                   +----+----+                         
-          +---------+                   +---+----+                        |                              
-                                            |                             |                              
-                                            v                             v                              
-                                         +-------+                   +--------+                          
-                                         |Retorna|                   |Retorna |                          
-                                         |True   |                   |Elemento|                          
-                                         +-------+                   +--------+                                                                                 
-)";
-	}
 };
 
 int main(){
 
 	Fila<int> exemplo(4);
-
-	std::cout << "Solução item a):\n";
-	exemplo.print_flux();
 
 	std::cout << "Solução item b):\n-------------\n"
 						<< "Criação de Fila:";
@@ -252,15 +176,5 @@ int main(){
 	exemplo.pop();
 	std::cout << exemplo << std::endl;
 
-
-
-	for(
-		int i = 0;
-				i < 3;
-				i++
-	){
-
-		printf("\n");
-	}
 	return 0;
 }
