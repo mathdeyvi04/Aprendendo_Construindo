@@ -13,31 +13,22 @@
 #include <cctype> 
 #include <cstdio>
 
+#include <regex> // Utilizaremos regex para os padrões de entrada.
+
 /**
  * @brief Representará a entidade aluno.
  */
 class Aluno {
 private:
 
-	int id;
-	std::string nome, cpf;
+	std::string ID, nome, cpf;
 
 public:
 
 	/**
-	 * @brief Construtor Default
-	 * @param id_ ID do aluno
-	 * @param nome_ NOME do aluno
-	 * @param cpf_ CPF do aluno
+	 * @brief Construção 
 	 */
-	Aluno(
-		int id_,
-		std::string nome_,
-		std::string cpf_
-	) : id(id_),
-		nome(nome_),
-		cpf(cpf_)
-	{}
+	Aluno() = default;
 
 	/**
 	 * @brief Construtor para facilitar inserção no vetor.	
@@ -47,22 +38,23 @@ public:
 		const std::vector<std::string>& param
 	){
 
-		id   = std::stoi(param[0]);
+		ID   = param[0];
 		nome = param[1];
 		cpf  = param[2];
+		
 	}
 
-	/**
-	 * @brief Retornará uma informação do aluno baseado em um índice.	
+	/**	
+	 * @brief Retornará uma referência constante do aluno baseado em um índice	
 	 */
-	std::string
+	const std::string&
 	get_info(
 		int idx
 	) const {
 
 		if     (idx == 0){
 
-			return std::to_string(id);
+			return ID;
 		}
 		else if(idx == 1){
 
@@ -77,6 +69,74 @@ public:
 			throw std::invalid_argument("Não é possível aceitar este índice.");
 		}
 	}
+
+	/**
+	 * @brief Fará as verificações necessárias e salvará o ID do aluno.	
+	 */
+	void
+	set_ID(){
+
+		std::string entrada;
+		std::regex pattern_ID("^\\d{5}$");
+		while(true){
+
+			std::cout << "Informe o ID do aluno: ";
+			std::getline(std::cin, entrada);
+
+			if(
+				!std::regex_match(entrada, pattern_ID)
+			){
+
+				std::cout << "Entrada inválida: ID deve conter apenas 5 dígitos." << std::endl;
+				continue;
+			}
+
+			// ID válido
+			ID = entrada;
+			break;
+		}
+	}
+
+	/**
+	 * @brief Fará as verificações necessárias e salvará o NOME do aluno.	
+	 * @details
+	 * 
+	 * Não há restrições de nomes.
+	 */
+	void
+	set_NOME(){
+
+		// Não há restrições de nomes.
+		std::cout << "Insira NOME do aluno: ";
+		std::getline(std::cin, nome);
+	}
+
+	/**
+	 * @brief Fará as verificações necessárias e salvará o CPF do aluno.	
+	 */
+	void
+	set_CPF(){
+
+		std::string entrada;
+		std::regex pattern_CPF("^\\d{11}$");
+		while(true){
+
+			std::cout << "Informe o CPF do aluno: ";
+			std::getline(std::cin, entrada);
+
+			if(
+				!std::regex_match(entrada, pattern_CPF)
+			){
+
+				std::cout << "Entrada inválida: CPF deve conter apenas 11 dígitos." << std::endl;
+				continue;
+			}
+
+			// CPF válido
+			cpf = entrada;
+			break;
+		}
+	}
 };
 
 /**
@@ -85,54 +145,40 @@ public:
 class Disciplina {
 private:
 
-	int credit, id;
-	std::string nome, professor;
+	std::string ID, nome, professor, credito;
 
 public:
 
 	/**
-	 * @brief Construtor Default 
-	 * @param id_ ID da disciplina
-	 * @param nome_ NOME da disciplina
-	 * @param professor_ PROFESSOR da disciplina
-	 * @param credit_ CREDITO quantidade de créditos da disciplina (?)
+	 * @brief Construtor Default	
 	 */
-	Disciplina(
-		int id_,
-		std::string nome_,
-		std::string professor_,
-		int credit_
-	) : id(id_),
-		nome(nome_),
-		professor(professor_),
-		credit(credit_)
-	{}
+	Disciplina() = default;
 
 	/**
 	 * @brief Construtor para facilitar inserção dentro do vetor.	
 	 * @param param Vetor de parâmetros, ID, NOME, PROFESSOR, CREDITO.
 	 */
 	Disciplina(
-		std::vector<std::string> param
+		const std::vector<std::string>& param
 	){
 
-		id        = std::stoi(param[0]);
+		ID        = param[0];
 		nome      = param[1];
 		professor = param[2];
-		credit    = std::stoi(param[3]);
+		credito   = param[3];
 	}
 
 	/**
 	 * @brief Retornará uma informação do aluno baseado em um índice.	
 	 */
-	std::string
+	const std::string&
 	get_info(
 		int idx
 	) const {
 
 		if     (idx == 0){
 
-			return std::to_string(id);
+			return ID;
 		}
 		else if(idx == 1){
 
@@ -144,11 +190,87 @@ public:
 		}
 		else if(idx == 3){
 
-			return std::to_string(credit);
+			return credito;
 		}
 		else{
 
 			throw std::invalid_argument("Não é possível aceitar este índice.");
+		}
+	}
+
+	/**
+	 * @brief Fará as verificações necessárias e salvará o ID da disciplina.	
+	 */
+	void
+	set_ID(){
+
+		std::string entrada;
+		std::regex pattern_ID("^\\d{4}$");
+		while(true){
+
+			std::cout << "Informe o ID da disciplina: ";
+			std::getline(std::cin, entrada);
+
+			if(
+				!std::regex_match(entrada, pattern_ID)
+			){
+
+				std::cout << "Entrada inválida: ID deve conter apenas 4 dígitos." << std::endl;
+				continue;
+			}
+
+			// ID válido
+			ID = entrada;
+			break;
+		}
+	}
+
+	/**
+	 * @brief Fará as verificações necessárias e salvará o NOME da disciplina.	
+	 */
+	void
+	set_NOME(){
+
+		// Não há restrições de nomes.
+		std::cout << "Insira NOME da disciplina: ";
+		std::getline(std::cin, nome);
+	}
+
+	/**
+	 * @brief Fará as verificações necessárias e salvará o PROFESSOR da disciplina.	
+	 */
+	void
+	set_PROFESSOR(){
+
+		// Não há restrições de nomes.
+		std::cout << "Insira PROFESSOR da disciplina: ";
+		std::getline(std::cin, professor);
+	}
+
+	/**	
+	 * @brief Fará as verificações necessárias e salvará o CRÉDITO da disciplina	
+	 */
+	void
+	set_CREDITO(){
+
+		std::string entrada;
+		std::regex pattern_CREDITO("^\\d+$");
+		while(true){
+
+			std::cout << "Informe o CREDITO da disciplina: ";
+			std::getline(std::cin, entrada);
+
+			if(
+				!std::regex_match(entrada, pattern_CREDITO)
+			){
+
+				std::cout << "Entrada inválida: CREDITO deve conter apenas dígitos." << std::endl;
+				continue;
+			}
+
+			// CPF válido
+			credito = entrada;
+			break;
 		}
 	}
 };
@@ -203,7 +325,7 @@ private:
 	// Para cada vetor presente, ele estará organizado da seguinte forma:
 	// [0] - ÍD da disciplina
 	// [1, ...] - ID dos alunos matriculados
-	std::vector<std::vector<int>> list_relations;
+	std::vector<std::vector<std::string>> list_relations;
 
 public:
 
@@ -243,11 +365,6 @@ public:
 	}
 
 	/**
-	 * @brief Retornará uma referência para uso interno	
-	 */
-
-
-	/**
 	 * @brief Construtor da classe
 	 * @details 
 	 * 
@@ -257,9 +374,7 @@ public:
 	Sistema(){
 
 		set_ano_periodo();
-
 		ensure_database();
-
 		get_data();
 	}
 
@@ -359,7 +474,6 @@ public:
 
 	/**
 	 * @brief Seta os valores de ano e de período, seja automaticamente ou pelo usuário.
-	 * @param automatico Flag para sabermos se o usuário deseja inserir manualmente.
 	 * @details
 	 * 
 	 * Caso seja forçado pelo usuário, se responsabilizará pela obtenção dos novos valores.
@@ -369,20 +483,14 @@ public:
 		bool automatico = true
 	){
 
-		if(automatico){
+		time_t agora = std::chrono::system_clock::to_time_t(
+			                                               std::chrono::system_clock::now()
+			                                               );
 
-			time_t agora = std::chrono::system_clock::to_time_t(
-				                                               std::chrono::system_clock::now()
-				                                               );
+		struct tm *local_time = localtime(&agora);
 
-			struct tm *local_time = localtime(&agora);
-
-			ano     = local_time->tm_year + 1900;
-			periodo = (local_time->tm_mon + 1) / 6 + 1;
-		}
-		else{
-
-		}
+		ano     = local_time->tm_year + 1900;
+		periodo = (local_time->tm_mon + 1) / 6 + 1;
 	}
 
 	/**
@@ -412,6 +520,7 @@ public:
 			std::ofstream db_criado;
 			db_criado.open(database_name);
 			db_criado.close();
+			std::cout << "Banco de dados criado..." << std::endl;
 		}
 
 		std::cout << "Abrindo banco de dados: "
@@ -480,27 +589,44 @@ public:
 				}
 				else if(flag_container == 3){
 
-					auto line_splitted = split(linha);
-
-					// Iniciamos um novo vetor zerado
-					list_relations.emplace_back();
-
-					// Reservamos o.
-					list_relations.back().reserve(
-												  line_splitted.size()
-												 );
-
-					for(
-						const auto& string_in_line_splitted : line_splitted
-					){
-
-						list_relations.back().emplace_back( std::stoi(string_in_line_splitted) );
-					}
+					list_relations.emplace_back(
+												std::move(split(linha))
+											   );
 				}
 			}
 		}
 
 		database.close();
+	}
+
+	/**
+	 * @brief Fornerá o nome do aluno ou da disciplina.	
+	 */
+	std::string
+	get_name(const std::string& ID){
+
+		// Sabemos que é disciplina
+		if     (ID.size() == 4){
+
+			for(
+				const auto& disciplina : list_disciplinas
+			){
+
+				if(disciplina.get_info(0) == ID){ return disciplina.get_info(1); }
+			}
+		}
+		// Sabemos que é aluno
+		else if(ID.size() == 5){
+
+			for(
+				const auto& aluno : list_alunos
+			){
+
+				if(aluno.get_info(0) == ID){ return aluno.get_info(1); }
+			}
+		}
+	
+		return "";
 	}
 
 	/**
@@ -517,6 +643,7 @@ public:
 		int flag_container
 	){
 
+		std::cout << "Visualizando em... " << ano << "." << periodo << std::endl;
 		if     (flag_container == 0){
 			// Desejamos ver a lista de alunos completa.
 
@@ -624,7 +751,7 @@ public:
 
 			// Vamos apresentar as funcionalidades de forma escalável:
 			std::vector<std::string> list_funcionalities = {
-				"0 - Encerrar",
+				"0 - Voltar",
 				"1 - Inserir novo Aluno",
 				"2 - Remover Aluno",
 				"3 - Consultar - Verifica disciplinas que aluno está matriculado"
@@ -647,7 +774,7 @@ public:
 
 			// Vamos apresentar as funcionalidades de forma escalável:
 			std::vector<std::string> list_funcionalities = {
-				"0 - Encerrar",
+				"0 - Voltar",
 				"1 - Inserir nova disciplina",
 				"2 - Remover Disciplina",
 				"3 - Consultar - Verifica alunos matriculados na disciplina."
@@ -669,87 +796,91 @@ public:
 	}
 
 	/**
+	 * @brief Verificará se o ID de um aluno ou de uma disciplina já existe.
+	 * @param ID String do ID da entidade.
+	 * @param is_aluno Flag para indicar se estamos buscando aluno ou disciplina.
+	 * @return True se existe. False, caso contrário.
+	 */
+	bool
+	exists(const std::string& ID, bool is_aluno){
+
+		if(is_aluno){
+
+			// Devemos varrer no sistema e verificar se o aluno existe.
+			for(
+				const auto& aluno : list_alunos
+			){
+
+				if( aluno.get_info(0) == ID ){
+
+					return true;
+				}
+			}
+		}
+		else{
+
+			for(
+				const auto& disciplina : list_disciplinas
+			){
+
+				if( disciplina.get_info(0) == ID ){
+
+					return true;
+				}
+			}
+
+		}
+
+		return false;
+	}
+
+	/**
 	 * @brief Fornecerá as ferramentas para inserção de um novo aluno ao sistema.
 	 */
 	void
 	insert_aluno(){
+		
+		Aluno aluno_a_ser_adicionado; // Iniciamos um aluno default
 
-		int id;
-		// Vamos usar a string de cpf para receber as informações
-		std::string nome, cpf, relation_str;
-
-		// Obtendo informações necessárias.
-		while(true){
-
-			std::cout << "Informe o ID do aluno: ";
-			std::getline(std::cin, cpf);
-
-			try {
-
-				if(cpf.size() != 5){
-					throw std::invalid_argument("");
-				}
-
-				id = std::stoi(cpf);
-				break;
-			}
-			catch(const std::invalid_argument&){
-
-				std::cout << "Entrada inválida" << std::endl;
-			}
+		// Com isso, garantimos que não há aluno com mesmo ID.
+		bool error_dualidade = false;
+		while(
+			// Se ele existir dentro da lista de alunos
+			// Se o ID estiver vazio
+			exists(aluno_a_ser_adicionado.get_info(0), true) || aluno_a_ser_adicionado.get_info(0).empty()
+		){ 
+			if(error_dualidade){ std::cout << "Já há um aluno com este ID." << std::endl; error_dualidade = true; }
+			
+			aluno_a_ser_adicionado.set_ID();
+			error_dualidade = true;
 		}
 
-		// Para o nome, não há como colocarmos restrições.
+		aluno_a_ser_adicionado.set_NOME();
+
+		aluno_a_ser_adicionado.set_CPF();
+
+		list_alunos.push_back(aluno_a_ser_adicionado);
+
+		// As matrículas são completamente responsabilidade do Sistema.
+		std::regex pattern_relation_str("^\\d{4}(,\\d{4})*$");
+		std::string relation_str;
+		print(1);
 		while(true){
 
-			std::cout << "Informe o NOME do aluno: ";
-			std::getline(std::cin, nome);
-
-			break;
-		}
-
-		while(true){
-
-			std::cout << "Informe o CPF do aluno: ";
-			std::getline(std::cin, cpf);
-
-			if(
-				std::all_of(cpf.begin(), cpf.end(), ::isdigit)
-			){
-
-				break;
-			}
-			else{
-
-				std::cout << "Entrada inválida" << std::endl;
-			}
-		}
-
-		// Devemos obter informações de matrícula.
-		while(true){
-
-			print(1);
 			std::cout << "Informe os ID's das disciplinas que este aluno está matriculado separado por vírgulas: \n";
 			std::getline(std::cin, relation_str);
 
 			if(
-				relation_str.find(',')
+				std::regex_match(relation_str, pattern_relation_str)
 			){
 
 				break;
 			}
 			else{
 
-				std::cout << "Deve existir pelo menos uma vírgula." << std::endl;
+				std::cout << "Entrada inválida: Deve existir pelo menos uma vírgula." << std::endl;
 			}
 		}
-
-		// Devemos adicionar o novo aluno ao sistema.
-		list_alunos.emplace_back(
-								id,
-								nome,
-								cpf
-			                    );
 
 		// Adicionar relações do aluno
 		for(
@@ -764,12 +895,12 @@ public:
 			){
 
 				if(
-					std::stoi(id_de_disciplina) == list_relations[i][0]
+					aluno_a_ser_adicionado.get_info(0) == list_relations[i][0]
 				){
 
 					// Achamos a disciplina na lista de relações.
 					// Nela devemos adicionar o novo aluno matriculado
-					list_relations[i].emplace_back(id); // Adicionamos o id do aluno.
+					list_relations[i].push_back(aluno_a_ser_adicionado.get_info(0)); // Adicionamos o id do aluno.
 
 					// E saímos, já que já o adicionamos nesta disciplina.
 					break;
@@ -787,55 +918,17 @@ public:
 	void
 	remove_aluno(){
 
-		int id = 0;
-		while(true){
+		Aluno aluno_a_ser_removido;
 
-			std::string entrada;
-			while(true){
-
-				std::cout << "Informe o ID do aluno: ";
-				std::getline(std::cin, entrada);
-
-				try {
-					if(entrada.size() != 5){
-						throw std::invalid_argument("");
-					}
-
-					id = std::stoi(entrada);
-					break;
-				}
-				catch(const std::invalid_argument&){
-
-					std::cout << "Entrada inválida" << std::endl;
-				}
-			}
-
-			// Precisamos verificar se o aluno existe
-			bool aluno_existis = false;
-			for(
-				const auto& aluno : list_alunos
-			){
-
-				if(
-					std::stoi(aluno.get_info(0)) == id
-				){
-
-					aluno_existis = true;
-					break;
-				}
-			}
-			if(!aluno_existis){
-
-				std::cout << "Aluno não existe!" << std::endl;
-				aluno_existis = false;
-				continue;
-			}
-			else{
-
-				break;
-			}
+		// Garantimos o ID existe e não é vazio
+		bool error_dualidade = false;
+		while(
+			!exists(aluno_a_ser_removido.get_info(0), true) || aluno_a_ser_removido.get_info(0).empty()
+		){ 
+			if(error_dualidade){ std::cout << "Não há aluno com este ID." << std::endl; error_dualidade = false; }
+			aluno_a_ser_removido.set_ID(); 
+			error_dualidade = true;
 		}
-
 
 		// Supondo que conseguimos, devemos removê-lo da lista de alunos.
 		list_alunos.erase(
@@ -843,7 +936,7 @@ public:
 						 			   list_alunos.begin(),
 						 			   list_alunos.end(),
 						 			   // Utilizamos função anônima
-						 			   [id](const Aluno& aluno){ return std::stoi(aluno.get_info(0)) == id; }
+						 			   [aluno_a_ser_removido](const Aluno& aluno){ return aluno.get_info(0) == aluno_a_ser_removido.get_info(0); }
 						 			   ),
 						 list_alunos.end()
 						 );
@@ -857,7 +950,7 @@ public:
  						   std::remove(
  						   			  relations.begin(),
  						   			  relations.end(),
- 						   			  id
+ 						   			  aluno_a_ser_removido.get_info(0)
  									  ),
  						   relations.end()
 						   );
@@ -874,95 +967,69 @@ public:
 
 		while(true){
 
-			// Devemos obter o ID do aluno a ser consultado.
-			std::string entrada;
-			int id;
-			while(true){
+			Aluno aluno_a_ser_consultado;
 
-				std::cout << "Forneça o ID do aluno: ";
-				std::getline(std::cin, entrada);
-
-				try {
-
-					if(entrada.size() != 5){
-						throw std::invalid_argument("");
-					}
-
-					id = std::stoi(entrada);
-					break;
-				}
-				catch(const std::invalid_argument&){
-
-					std::cout << "Entrada inválida" << std::endl;
-				}
+			// Devemos ter garantia que ele existe
+			bool error_dualidade = false;
+			while(
+				!exists(aluno_a_ser_consultado.get_info(0), true) || aluno_a_ser_consultado.get_info(0).empty()
+			){ 
+				if(error_dualidade){ std::cout << "Não há aluno com este ID." << std::endl; error_dualidade = false; }
+				aluno_a_ser_consultado.set_ID(); 
+				error_dualidade = true;
 			}
 
-			// O ideal é ver se esse aluno existe.
-			bool aluno_existis = false;
-			for(
-				const auto& aluno : list_alunos
-			){
-
-				if(
-					std::stoi(aluno.get_info(0)) == id
-				){
-
-					aluno_existis = true;
-					break;
-				}
-			}
-			if(!aluno_existis){
-
-				std::cout << "Aluno não existe!" << std::endl;
-				aluno_existis = false;
-				continue;
-			}
-
-			// De posse do id do aluno, podemos verificar em quais disciplinas ele está matriculado.
-			std::cout << "Aluno " 
-				      << entrada 
-				      << " matriculado em: "
-				      << std::endl;
+			// Garantido que o ano existe, o sistema pode buscá-lo.
+			std::cout << "Aluno "
+					  << aluno_a_ser_consultado.get_info(0)
+					  << " matriculado em:"
+					  << std::endl;
 			for(
 				const auto& relations : list_relations
 			){
 
+				// Devemos verificar em que disciplina esse ID existe.
 				for(
-					int i = 1;  // Afinal, apenas a partir do segundo há os id's de alunos.
+					int i = 1; // O primeiro é o ID da disciplina
 						i < (int)relations.size();
 						i++
 				){
 
 					if(
-						// Assim que o encontrarmos
-						id == relations[i]
+						aluno_a_ser_consultado.get_info(0) == relations[i]
 					){
 
-						std::cout << "- " 
-								  << relations[0]
-								  << std::endl;
+						std::cout << "- "
+						          << relations[0]
+						          << " | "
+						          << get_name(relations[0])
+						          << std::endl;
 
-						// Seria interessante informarmos mais dados sobre a disciplina, mas...
-
-						break;
+						break; // Não precisamos mais guardar
 					}
 				}
 			}
 
+			// Devemos verificar se há necessidade de mais uma consulta
+			std::string entrada;
+			while(true){
 
-			std::cout << "Mais uma consulta?(0 - Não): ";
-			std::getline(std::cin, entrada);
-			try {
+				std::cout << "Mais uma consulta?(0 - Não)(1 - Sim): " << std::endl;
+				std::getline(std::cin, entrada);
 
-				if(
-					std::stoi(entrada) == 0
-				){
+				if(entrada == "0"){
+
+					return;
+				}
+				else if(entrada == "1"){
 
 					break;
 				}
+				else{
+
+					std::cout << "Entrada inválida" << std::endl;
+				}
 			}
-			catch(const std::invalid_argument&){ /*Não faremos nada*/ }
-			printf("\n");
 		}
 
 		// Não há alteração do banco de dados, logo não precisamos salvar algo
@@ -974,65 +1041,36 @@ public:
 	void
 	insert_disciplina(){
 
-		// Primeiro, as informações da mesma.
-		int id, credito;
-		std::string nome, professor, entrada;
-		while(true){
-			std::cout << "Informe o ID da disciplina: ";
-			std::getline(std::cin, entrada);
-			
-			try {
+		Disciplina disciplina_a_ser_adicionada;
 
-				if(entrada.size() != 4){
-					throw std::invalid_argument("");
-				}
-
-				id = std::stoi(entrada);
-				break;
-			}
-			catch(const std::invalid_argument&){
-
-				std::cout << "Entrada inválida" << std::endl;
-			}			
+		bool error_dualidade = false;
+		while(
+			exists(disciplina_a_ser_adicionada.get_info(0), false) || disciplina_a_ser_adicionada.get_info(0).empty()
+		){
+			if(error_dualidade){ std::cout << "Já há uma disciplina com este ID." << std::endl; error_dualidade = false;}
+			disciplina_a_ser_adicionada.set_ID();
+			error_dualidade = true;
 		}
 
-		std::cout << "Informe o NOME da disciplina: ";
-		std::getline(std::cin, nome);
+		disciplina_a_ser_adicionada.set_NOME();
 
-		std::cout << "Informe o PROFESSOR da disciplina: ";
-		std::getline(std::cin, professor);
+		disciplina_a_ser_adicionada.set_PROFESSOR();
 
-		while(true){
-			std::cout << "Informe o CRÉDITO da disciplina: ";
-			std::getline(std::cin, entrada);
-			
-			try {
+		disciplina_a_ser_adicionada.set_CREDITO();
 
-				credito = std::stoi(entrada);
-				break;
-			}
-			catch(const std::invalid_argument&){
+		list_disciplinas.push_back(disciplina_a_ser_adicionada);
 
-				std::cout << "Entrada inválida" << std::endl;
-			}			
-		}
-		
-		// De posse de todas as informações
-		list_disciplinas.emplace_back(
-									 id,
-									 nome,
-									 professor,
-									 credito
-									 );
-
-		list_relations.emplace_back(); // Iniciamos um vetor default
-		list_relations.back().emplace_back(id); // Já colocamos o id da disciplina primeiro
+		// Adicionaremos os alunos que estão matriculados nela.
+		list_relations.emplace_back();
+		list_relations.back().emplace_back(disciplina_a_ser_adicionada.get_info(0)); // Já colocamos o id da disciplina primeiro
+		std::regex pattern_relation_str_("^\\d{5}(,\\d{5})*$");
+		std::string entrada;
 		while(true){
 
 			std::cout << "Apresente os alunos matriculados na disciplina separados por vírgula(* - todos):" << std::endl;
 			std::getline(std::cin, entrada);
 
-			if(entrada.size() && entrada[0] == '*'){
+			if(entrada == "*"){
 
 				// Todos os alunos deverão ser adicionados.
 				for(
@@ -1046,21 +1084,144 @@ public:
 			}
 			else{
 
-				if(entrada.find(",")){ std::cout << "Entrada inválida, separe com ','" << std::endl; continue;}
-				// Apenas alguns serão matriculados
+				if(std::regex_match(entrada, pattern_relation_str_)){
 
-				for(
-					const auto& string_id : split(entrada)
-				){
+					// Há alguns que devemos adicionar
+					for(
+						const auto& string_id_aluno : split(entrada)
+					){
 
-					list_relations.back().emplace_back(std::stoi(string_id));
+						// Devemos salvar apenas os alunos que existem.
+
+						if(
+							exists(string_id_aluno, true)
+						){
+
+							list_relations.back().emplace_back(string_id_aluno);
+						}
+						else{
+
+							std::cout << "Ignorando ID inexistente: " 
+									  << string_id_aluno
+									  << std::endl;
+						}
+					}
+
+					break;
 				}
-
-				break;
 			}
+
+			std::cout << "Entrada inválida." << std::endl;
 		}
 
 		houve_altera = true;
+	}
+
+	/**
+	 * @brief Fornecerá as ferramentas necessárias para remoção de uma disciplina.	
+	 */
+	void
+	remove_disciplina(){
+
+		Disciplina disciplina_a_ser_removida;
+
+		bool error_dualidade = false;
+		while(
+			!exists(disciplina_a_ser_removida.get_info(0), false) || disciplina_a_ser_removida.get_info(0).empty()
+		){
+
+			if(error_dualidade){ std::cout << "Não há disciplina com este ID." << std::endl; error_dualidade = false; }
+			disciplina_a_ser_removida.set_ID();
+			error_dualidade = true;
+		}
+
+		list_disciplinas.erase(
+							  std::remove_if(
+							 			   list_disciplinas.begin(),
+							 			   list_disciplinas.end(),
+							 			   // Utilizamos função anônima
+							 			   [disciplina_a_ser_removida](const Disciplina& disciplina){ return disciplina.get_info(0) == disciplina_a_ser_removida.get_info(0); }
+							 			   ),
+							  list_disciplinas.end()
+							  );
+
+		// Independente dos alunos matriculados, devemos remover a disciplina.
+		list_relations.erase(
+							std::remove_if(
+							 			   list_relations.begin(),
+							 			   list_relations.end(),
+							 			   // Utilizamos função anônima
+							 			   [disciplina_a_ser_removida](const std::vector<std::string>& relations){ return relations[0] == disciplina_a_ser_removida.get_info(0); }
+							 			   ),
+							list_relations.end()
+							);
+
+		houve_altera = true;
+	}
+
+	/**
+	 * @brief Fornecerá a lista de alunos matriculados na disciplina	
+	 */
+	void
+	consultar_disciplina(){
+
+		while(true){
+
+			Disciplina disciplina_a_ser_consultada;
+
+			bool error_dualidade = false;
+			while(
+				!exists(disciplina_a_ser_consultada.get_info(0), false) || disciplina_a_ser_consultada.get_info(0).empty()
+			){ 
+				if(error_dualidade){ std::cout << "Não há disciplina com este ID." << std::endl; error_dualidade = false; }
+				disciplina_a_ser_consultada.set_ID(); 
+				error_dualidade = true;
+			}
+
+			// Temos confirmação de existência
+			for(
+				const auto& relations : list_relations
+			){
+
+				if( relations[0] == disciplina_a_ser_consultada.get_info(0) ){
+
+					// Achamos a disciplina
+					for(
+						int i = 1;
+							i < (int)relations.size();
+							i++
+					){
+
+						std::cout << "- "
+								  << relations[i]
+								  << " | "
+								  << get_name(relations[i])
+								  << std::endl;
+					}				
+				}
+			}
+
+			// Devemos verificar se há necessidade de mais uma consulta
+			std::string entrada;
+			while(true){
+
+				std::cout << "Mais uma consulta?(0 - Não)(1 - Sim): " << std::endl;
+				std::getline(std::cin, entrada);
+
+				if(entrada == "0"){
+
+					return;
+				}
+				else if(entrada == "1"){
+
+					break;
+				}
+				else{
+
+					std::cout << "Entrada inválida" << std::endl;
+				}
+			}
+		}
 	}
 
 	/**
@@ -1073,7 +1234,7 @@ public:
 	mainloop(){
 
 		bool there_is_a_error = false;
-		int PULA_LINHAS = 40;
+		int PULA_LINHAS = 30;
 		while(true){
 			for(int i = 0; i < PULA_LINHAS; i++){ printf("\n"); }
 
@@ -1170,11 +1331,11 @@ public:
 							}
 							else if(decisao == 2){
 
-
+								remove_disciplina();
 							}
 							else if(decisao == 3){
 
-
+								consultar_disciplina();
 							}
 							else{
 
@@ -1186,6 +1347,10 @@ public:
 							there_is_a_error = true;
 						}
 					}
+				}
+				else{
+
+					there_is_a_error = true;
 				}
 			}
 			catch(const std::invalid_argument&){

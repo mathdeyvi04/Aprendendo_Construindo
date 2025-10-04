@@ -134,11 +134,42 @@ public:
 	get_conj() { return Complex(_real, - _img); }
 };
 
-int main(){
+int main() {
+    // Criação de números complexos
+    Complex cp1(3, 4);
+    Complex cp2(1, -2);
 
-	Complex cp(1, -1);
-	Complex a(0, 0);
+    // Impressão
+    std::cout << "cp1: " << cp1 << std::endl;
+    std::cout << "cp2: " << cp2 << std::endl;
 
-	std::cout << cp / a << std::endl;
-	return 0;
+    // Soma
+    Complex soma = cp1 + cp2;
+    std::cout << "Soma: " << soma << std::endl;
+
+    // Subtração
+    Complex sub = cp1 - cp2;
+    std::cout << "Subtração: " << sub << std::endl;
+
+    // Multiplicação
+    Complex mult = cp1 * cp2;
+    std::cout << "Multiplicação: " << mult << std::endl;
+
+    // Divisão com tratamento de exceção
+    Complex div = cp1 / cp2;
+    std::cout << "Divisão: " << div << std::endl;
+
+    // Módulo
+    std::cout << "Módulo de cp1: " << cp1.get_abs() << std::endl;
+
+    // Conjugado
+
+    Complex conj = cp1.get_conj();
+    std::cout << "Conjugado de cp1: " << conj << std::endl;
+
+    // Comparação
+    std::cout << "cp1 == cp2? " << (cp1 == cp2 ? "Sim" : "Não") << std::endl;
+
+    return 0;
 }
+
